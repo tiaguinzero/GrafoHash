@@ -1,3 +1,6 @@
+package GrafoHash;
+import List.ListaEncadeadaSimplesDesordenada2;
+
 public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
                     TpInfVrt,
                     TpIdArt extends Comparable<TpIdArt>,
@@ -159,13 +162,13 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         
     }
 
-    ListaEncadeadaSimplesDesordenada<TpIdVrt, Vertice> vertices;
-    ListaEncadeadaSimplesDesordenada<TpIdArt, Aresta>  arestas;
+    ListaEncadeadaSimplesDesordenada2<TpIdVrt, Vertice> vertices;
+    ListaEncadeadaSimplesDesordenada2<TpIdArt, Aresta>  arestas;
     
     public Grafo ()
     {
-        this.vertices = new ListaEncadeadaSimplesDesordenada <TpIdVrt,Vertice> ();
-        this.arestas  = new ListaEncadeadaSimplesDesordenada <TpIdArt,Aresta> ();
+        this.vertices = new ListaEncadeadaSimplesDesordenada2 <TpIdVrt,Vertice> ();
+        this.arestas  = new ListaEncadeadaSimplesDesordenada2 <TpIdArt,Aresta> ();
     }
     
     public void adicioneVertice (TpIdVrt id, TpInfVrt inf) throws Exception

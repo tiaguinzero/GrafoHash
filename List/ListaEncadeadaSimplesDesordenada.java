@@ -1,4 +1,6 @@
-public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, X extends Identificavel<TpIdX>> implements Cloneable
+package List;
+
+public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 {
 	private class No implements Cloneable
 	{
@@ -16,7 +18,6 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 	        this.info=i;
 	        this.prox=null;
 	    }
-	    
 	    public X getInfo ()
 	    {
 	        return this.info;
@@ -92,11 +93,7 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 		}
 	}
 	
-	private No primeiro;
-	
-	public ListaEncadeadaSimplesDesordenada(){
-		this.primeiro = null;
-	}
+	private No primeiro=null;
 	
 	public void guardeNoInicio (X i) throws Exception
 	{
@@ -111,21 +108,73 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 
         if (this.primeiro==null) this.primeiro = new No (i);
         
-        No atual=this.primeiro;
+        No currentNo=this.primeiro;
         
-        while (atual.getProx()!=null)
-            atual=atual.getProx();
+        while (currentNo.getProx()!=null)
+            currentNo=currentNo.getProx();
         
-        atual.setProx(new No (i));
+        currentNo.setProx(new No (i));
 	}
 	
-	/*
-        Digamos que a lista tenha n nós; incluir na posicao 0,
-        é incluir no inicio; incluir na posicao 1, é incluir
-        entre o 1º e o 2º nó; e assim por diante até que,
-        incluir na posicao n, é incluir no final; MAS NOTE,
-        incluir numa posicao>n leva a uma exceção.
-    */
+	public boolean tem (X i)
+	{
+		No currentNo=this.primeiro;
+		
+		while (currentNo!=null)
+		{
+			if (currentNo.getInfo().equals(i)) return true;
+			
+			currentNo=currentNo.getProx();
+		}
+		
+		return false;
+	}
+	
+	public X getPrimeiro () throws Exception
+	{
+		if(this.primeiro == null) throw new Exception("Lista Vazia");
+
+		return this.primeiro.getInfo();
+	}
+	
+	public X getUltimo () throws Exception
+	{
+		if(this.primeiro == null) throw new Exception("Lista Vazia");
+
+		if(this.primeiro.getProx() == null) return this.primeiro.info;
+
+		No currentNo = this.primeiro;
+		while (currentNo.getProx()!=null) {
+			currentNo = currentNo.getProx();
+		}
+		return currentNo.getInfo();
+	}
+	
+	// posicao poderá ser 0, 1, etc
+	public X get (int posicao) throws Exception
+	{
+
+
+		if(posicao<0) throw new Exception("Posição Inválida.");
+
+		if(posicao == 0) return this.primeiro.getInfo();
+
+		int count = 1;
+		No currentNo = this.primeiro;
+
+		while (currentNo.getProx() != null) {
+
+			if(count == posicao) return currentNo.getInfo();
+
+			currentNo = currentNo.getProx();
+
+			count++;
+		}
+
+		throw new Exception("Posição Inválida "+ posicao);
+
+	}
+
 	public void guardeEm (int posicao, X i) throws Exception
 	{
 		if (posicao<0) throw new Exception ("Posicao invalida");
@@ -151,141 +200,80 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 		atual.setProx (new No (inf,atual.getProx()));
 	}
 	
-	public boolean tem (TpIdX ix)
-	{
-		No atual=this.primeiro;
-		
-		while (atual!=null)
-		{
-			if (atual.getInfo().getId().equals(ix))
-			return true;
-			
-			atual=atual.getProx();
-		}
-		
-		return false;
-	}
-	
-	public X getPrimeiro () throws Exception
-	{
-		if(this.primeiro==null){
-			throw new Exception ("ponteiro nulo");
-		}
-		
-		X infoPrimeiro = new Clonador<X>().clone(this.primeiro.getInfo());
-		return infoPrimeiro;
-	}
-	
-	public X getUltimo () throws Exception
-	{
-		if (this.primeiro==null) throw new Exception("A lista está vazia");
-		 
-		No atual = this.primeiro;
-		while(atual.getProx()!=null){
-			atual= atual.getProx();
-		}
-		X infoUltimo = new Clonador<X>().clone(atual.getInfo());
-		return infoUltimo;
-			
-	}
-	
-	private int getTamanho()
-	{
-			if(this.primeiro == null)
-			{
-				return 0;
-			}
-			
-			No atual = this.primeiro;
-			int elementos = 0;
-			
-			while(atual != null)
-			{
-					atual = atual.getProx();
-					elementos++;
-			}
-			
-			return elementos;
-	}
-	
-	// posicao poderá ser 0, 1, etc
-	public X get (int posicao) throws Exception
-	{
-		if(this.primeiro == null)
-		{
-			throw new Exception("Nó invalido");
-		}
-		if(posicao < 0)
-		{
-			throw new Exception("Posicao invalida");
-		}
-		if(posicao > getTamanho() - 1)
-		{
-				throw new Exception("Posicao invalida");	
-		}
-		if(posicao == 0)
-		{
-				return this.primeiro.getInfo();
-		}
-		
-		No atual = this.primeiro;
-		int indice = 0;
-		
-		while(atual != null && indice<posicao)
-		{
-				atual = atual.getProx();
-				indice++;
-		}
-		
-		X cont = new Clonador<X>().clone(atual.getInfo());
-		return cont;
-	}
+
 	
 	public void removaPrimeiro () throws Exception
 	{
-		if (this.primeiro==null) throw new Exception ("Nó invalido");
-		this.primeiro = this.primeiro.getProx();
+		if(this.primeiro == null) throw new Exception("Lista Vazia");
+
+		//Não sei se pode remover o primeiro elemento mesmo a lista tendo apenas um elemento, deixando ela vazia.
+		//Se sim, ficaria desta forma o método:
+				if (this.primeiro.getProx() == null) {
+					this.primeiro = null;
+				} else {
+					this.primeiro = this.primeiro.getProx();
+				}
 	}
 	
 	public void removaUltimo () throws Exception
 	{
-		if (this.primeiro==null) throw new Exception ("Nó invalido");
-		
-		if (this.primeiro.getProx()==null)
-		{
-			this.primeiro=null;
+		if(this.primeiro == null) throw new Exception("Lista Vazia");
+
+		if(this.primeiro.getProx()==null){
+			this.primeiro = null;
 			return;
 		}
-		
-		No atual = this.primeiro;
-		
-		while (atual.getProx() != null){
-			atual = atual.getProx();
+
+		No currentNo = this.primeiro;
+		No predecessor = null;
+
+		while (currentNo.getProx() != null) {
+			predecessor = currentNo;
+			currentNo = currentNo.getProx();
+		}
+		predecessor.setProx(null);
+	}	
+
+	public void remova(int posicao) throws Exception {
+		if (posicao < 0) throw new Exception("Falta Posição");
+
+		if (posicao == 0) {
+			this.primeiro = this.primeiro.getProx();
+			return;
 		}
 
-		atual.setProx(null);
-	}
-	
-	// posições serão numeradas 0, 1, 2, etc
-	public void remova (int posicao) throws Exception
-	{
-		if(posicao < 0 || posicao >= this.getTamanho()){
-			throw new IndexOutOfBoundsException("Index out of bounds");
-		}
-			
-			
-		if(posicao == 0){
-			this.primeiro = this.primeiro.getProx();
-		} else{
-			No aux = this.primeiro;
-			for(int i = 0; i < posicao - 1; i++){
-			    aux = aux.getProx();
+		No currentNo = this.primeiro;
+		int contador = 1;
+		No predecessor = null;
+
+		while (currentNo != null) {
+			if (contador == posicao) {
+				predecessor.setProx(currentNo.getProx());
+				return;
 			}
-		
-			aux.setProx(aux.getProx().getProx()); 
+
+			predecessor = currentNo;
+			currentNo = currentNo.getProx();
+			contador++;
 		}
+
+		throw new Exception("Posição não existente na Lista.");
 	}
-	
+
+	public int getTamanho(){
+		int count = 0;
+		No currentNo = this.primeiro;
+
+		while (currentNo != null) {
+			count++;
+			currentNo = currentNo.getProx();
+		}
+
+		return count;
+	}
+
+
+
     @Override
     public String toString ()
     {
@@ -295,12 +283,12 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 		
 		ret+=this.primeiro.getInfo();
 		
-		No atual = this.primeiro.getProx();
+		No currentNo = this.primeiro.getProx();
 		
-		while (atual!=null)
+		while (currentNo!=null)
 		{
-			ret+=", "+atual.getInfo();
-			atual=atual.getProx();
+			ret+=", "+currentNo.getInfo();
+			currentNo=currentNo.getProx();
 		}
 		
 		return ret+"]";
@@ -314,14 +302,11 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 		if (obj.getClass()!=this.getClass()) return false;
 		
 		No atualDoThis = this.primeiro;
-		No atualDoObj  = ((ListaEncadeadaSimplesDesordenada<TpIdX, X>)obj).primeiro;
+		No atualDoObj  = ((ListaEncadeadaSimplesDesordenada<X>)obj).primeiro;
 		
 		while (atualDoThis!=null && atualDoObj!=null)
 		{
-			if (!atualDoThis.getInfo().equals(atualDoObj.getInfo())){
-				 
-				return false;
-			}
+			if (!atualDoThis.getInfo().equals(atualDoObj.getInfo())) return false;
             atualDoThis=atualDoThis.getProx();
             atualDoObj =atualDoObj .getProx();
 		}
@@ -336,19 +321,19 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 	{
 		int ret=1;
 		
-		No atual=this.primeiro;
+		No currentNo=this.primeiro;
 		
-		while (atual!=null)
+		while (currentNo!=null)
 		{
-			ret = ret*2 + atual.getInfo().hashCode();
-			atual=atual.getProx();
+			ret = ret*2 + currentNo.getInfo().hashCode();
+			currentNo=currentNo.getProx();
 		}		
 		
 		if (ret<0) ret=-ret;
 		return ret;
 	}
 	
-	public ListaEncadeadaSimplesDesordenada (ListaEncadeadaSimplesDesordenada<TpIdX, X> modelo) throws Exception
+	public ListaEncadeadaSimplesDesordenada (ListaEncadeadaSimplesDesordenada<X> modelo) throws Exception
 	{
 		if (modelo==null) throw new Exception ("Modelo ausente");
 		
@@ -371,10 +356,20 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, 
 			atualDoModelo=atualDoModelo.getProx();
 		}
 	}
+
+	public ListaEncadeadaSimplesDesordenada(X info){//CRIEI ESTE CONSTRUTOR APENAS PARA FAZER TESTES. NÃO TENHO CERTEZA SE ESTÁ CORRETO."ESTÁ FALTANDO EXCEPTION PARA INFO VAZIA".
+		this.primeiro = new No(info);
+	}
+
+	public ListaEncadeadaSimplesDesordenada(){
+		this.primeiro = null;
+	}
+
+	
 	
 	public Object clone ()
 	{
-		ListaEncadeadaSimplesDesordenada<TpIdX, X> ret=null;
+		ListaEncadeadaSimplesDesordenada<X> ret=null;
 		
 		try
 		{
