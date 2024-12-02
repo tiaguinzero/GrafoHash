@@ -170,7 +170,7 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
     
     public void adicioneVertice (TpIdVrt id, TpInfVrt inf) throws Exception
     {
-        if (!vertices.tem(id)) throw new Exception ("esse Id de vértice já existe");
+        if (vertices.tem(id)) throw new Exception ("esse Id de vértice já existe");
         this.vertices.guardeNoInicio(new Vertice(id,inf));
     }
     
@@ -178,4 +178,38 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
     {
         this.arestas.guardeNoInicio(new Aresta(id,inf,org,dst));
     }
+
+    public void removaAresta (TpIdArt id) throws Exception
+    {
+
+    } 
+
+    public void removaVertice (TpIdVrt id ) throws Exception
+    {
+
+    }
+
+    public boolean temVertice (TpIdVrt id) throws Exception
+    {
+        if(vertices.tem(id)) throw new Exception("esse Vértice existe!");
+        else throw new Exception("esse Vértice não existe!");  
+
+    }
+
+    public boolean temAresta (TpIdArt id) throws Exception
+    {
+        if(arestas.tem(id)) throw new Exception("essa Aresta existe!");
+        else throw new Exception("essa Aresta não existe!");
+
+    }
+
+    public void numVertices() throws Exception
+    {
+
+    }
+    
+    public void numAresta() throws Exception
+    {
+
+    } 
 }

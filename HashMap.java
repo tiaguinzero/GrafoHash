@@ -5,10 +5,30 @@ public class HashMap <K,V> implements Cloneable
         private K chave;
         private V valor;
 
+        public Elemento (K chave, V valor){
+            this.chave = chave;
+            this.valor = valor;
+        }
         // getters, setters e overrides
+
+        public K getChave(){
+            return this.chave;
+        }
+
+        public V getValor(){
+            return this.valor;
+        }
+
+        public void setChave(){
+            this.chave = chave;
+        }
+
+        public void setValor(){
+            this.valor = valor;
+        }
     }
 
-    private ListaEncadeadaSimplesDesordenada<Elemento>[] vetor;
+    private ListaEncadeadaSimplesDesordenada<Elemento, Elemento>[] vetor;
     private int qtdElems=0, qtdPosOcupadas=0;
     private int capacidadeInicial;
     private float txMinDesperdicio, txMaxDesperdicio;
@@ -45,10 +65,14 @@ public class HashMap <K,V> implements Cloneable
 	}
 
     public V recupereUmItem (K chave) throws Exception
-    {...}
+    {
+
+    }
 
     public void removaUmItem (K chave) throws Exception
-    {...}
+    {
+
+    }
 
     // construtores e overrides
 }

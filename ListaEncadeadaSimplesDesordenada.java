@@ -1,4 +1,4 @@
-public class ListaEncadeadaSimplesDesordenada <TpIdX, X extends Identificavel<TpIdX> implements Cloneable
+public class ListaEncadeadaSimplesDesordenada <TpIdX extends Comparable<TpIdX>, X extends Identificavel<TpIdX>> implements Cloneable
 {
 	private class No implements Cloneable
 	{
@@ -314,7 +314,7 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX, X extends Identificavel<Tp
 		if (obj.getClass()!=this.getClass()) return false;
 		
 		No atualDoThis = this.primeiro;
-		No atualDoObj  = ((ListaEncadeadaSimplesDesordenada<X>)obj).primeiro;
+		No atualDoObj  = ((ListaEncadeadaSimplesDesordenada<TpIdX, X>)obj).primeiro;
 		
 		while (atualDoThis!=null && atualDoObj!=null)
 		{
@@ -348,7 +348,7 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX, X extends Identificavel<Tp
 		return ret;
 	}
 	
-	public ListaEncadeadaSimplesDesordenada (ListaEncadeadaSimplesDesordenada<X> modelo) throws Exception
+	public ListaEncadeadaSimplesDesordenada (ListaEncadeadaSimplesDesordenada<TpIdX, X> modelo) throws Exception
 	{
 		if (modelo==null) throw new Exception ("Modelo ausente");
 		
@@ -374,7 +374,7 @@ public class ListaEncadeadaSimplesDesordenada <TpIdX, X extends Identificavel<Tp
 	
 	public Object clone ()
 	{
-		ListaEncadeadaSimplesDesordenada<X> ret=null;
+		ListaEncadeadaSimplesDesordenada<TpIdX, X> ret=null;
 		
 		try
 		{
