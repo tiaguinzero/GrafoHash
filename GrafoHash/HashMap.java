@@ -23,6 +23,10 @@ public class HashMap<K, V> {
             this.valor = valor;
         }
 
+        public void setChave(K chave) {
+            this.chave = chave;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == null)
@@ -53,49 +57,49 @@ public class HashMap<K, V> {
         }
     }
 
-    private ListaEncadeadaSimplesDesordenada<Elemento>[] vetor;
-    private int qtdElems = 0;
-    private int capacidadeInicial;
-    private float txMinDesperdicio, txMaxDesperdicio;
+    private ListaEncadeadaSimplesDesordenada<Elemento>[] vetor; // vetor tem elemento, elemento tem chave e valor
+    private int qtdElems = 0; //conta a qtd de elementos no hashMap
+    private int numBuckets; //número de buckets
+    private float txMinDesperdicio, txMaxDesperdicio; //controla o redimensionamento
 
     // Construtor principal
-    public HashMap(int capacidadeInicial, float txMinDesperdicio, float txMaxDesperdicio) {
-        this.capacidadeInicial = capacidadeInicial;
+    public HashMap(int numBuckets, float txMinDesperdicio, float txMaxDesperdicio) {
+        this.numBuckets = numBuckets;
         this.txMinDesperdicio = txMinDesperdicio;
         this.txMaxDesperdicio = txMaxDesperdicio;
-        this.vetor = new ListaEncadeadaSimplesDesordenada[capacidadeInicial];
+        this.vetor = new ListaEncadeadaSimplesDesordenada[numBuckets];
     }
 
     // Construtor alternativo com taxas padrão
-    public HashMap(int capacidadeInicial) {
-        this(capacidadeInicial, 0.7f, 0.9f); // Valores padrão de 70% e 90%
+    public HashMap(int numBuckets) { 
+        this(numBuckets, 0.7f, 0.9f); // Valores padrão de 70% e 90%
     }
 
-    private int calcularIndice(K chave) {
-        int ret = chave.hashCode();
-        if (ret < 0) {
-            ret = -ret;
+    private int calcularIndice(K chave) { //indicie da chave
+        int ret = chave.hashCode(); //usa o valor da chave para para criar um hashcode
+        if (ret < 0) { //se o hash code for negativo
+            ret = -ret; //tranforma em positivo
         }
-        return ret % capacidadeInicial;
+        return ret % numBuckets; //modulo entre hash da chave e numBuckets para saber em qual bucket a chave será armazenada.
     }
 
     private void verificarTaxaEDimensionar() {
-        float taxaOcupacao = (float) qtdElems / capacidadeInicial;
+        float taxaOcupacao = (float) qtdElems / numBuckets; //ocupação = numElemento/numBuckets
 
-        if (taxaOcupacao > txMaxDesperdicio) {
-            redimensionar(capacidadeInicial * 2); // Aumenta o tamanho
-        } else if (taxaOcupacao < txMinDesperdicio && capacidadeInicial > 1) {
-            int novaCapacidade = capacidadeInicial / 2;
-            if (novaCapacidade < 1) {
-                novaCapacidade = 1;
+        if (taxaOcupacao > txMaxDesperdicio) { //se taxa de ocupação for maior q 90%
+            redimensionar(numBuckets * 2); // Dobra a capacidade
+        } else if (taxaOcupacao < txMinDesperdicio && numBuckets > 1) { //numBuckets precisa tem pelos menos 1 bucket
+            int novaCapacidade = numBuckets / 2; //diminui se a taxaOcupação for menor que 70%
+            if (novaCapacidade < 1) { //se não tem bucket
+                novaCapacidade = 1; //o bucket será igual a 1
             }
             redimensionar(novaCapacidade); // Diminui o tamanho, mas não abaixo de 1
-                                           // capacidadeInicial
+                                           // numBuckets
         }
     }
 
-    private void redimensionar(int novaCapacidade) {
-        ListaEncadeadaSimplesDesordenada<Elemento>[] novaTabela = new ListaEncadeadaSimplesDesordenada[novaCapacidade];
+    private void redimensionar(int novaCapacidade) { //redimencionar é duplicar ou dividir o NUMERO DE BUCKETS
+        ListaEncadeadaSimplesDesordenada<Elemento>[] novaTabela = new ListaEncadeadaSimplesDesordenada[novaCapacidade]; //crie uma nova tabela com a capacidade nova
         for (ListaEncadeadaSimplesDesordenada<Elemento> lista : vetor) {
             if (lista != null) {
                 for (int i = 0; i < lista.getTamanho(); i++) {
@@ -114,115 +118,119 @@ public class HashMap<K, V> {
             }
         }
         vetor = novaTabela;
-        capacidadeInicial = novaCapacidade;
+        numBuckets = novaCapacidade;
     }
 
     public void guardeUmItem(K chave, V valor) throws Exception {
-        if (chave == null) {
+        if (chave == null) { //verifica se a chave foi passada pelo o úsuario
             throw new Exception("Chave não pode ser nula");
         }
 
-        int indice = calcularIndice(chave);
+        int indice = calcularIndice(chave); //calcula qual indicie do bucket para armazenar a chave
 
-        if (vetor[indice] == null) {
-            vetor[indice] = new ListaEncadeadaSimplesDesordenada<>();
+        if (vetor[indice] == null) { //se não exite um bucket com esse indicie 
+            vetor[indice] = new ListaEncadeadaSimplesDesordenada<>(); //cria um novo bucket com esse indicie
         }
 
-        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice];
-        Elemento novoElemento = new Elemento(chave, valor);
+        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice]; // tranforma o indicie em uma ListaEncadeada/bucket
+        Elemento novoElemento = new Elemento(chave, valor); //cria o elemento a partir da chave e valor do usuario.
 
         for (int i = 0; i < lista.getTamanho(); i++) {
-            Elemento atual = lista.get(i);
-            if (atual.getChave().equals(chave)) {
+            Elemento atual = lista.get(i); //percorre a lista
+            if (atual.getChave().equals(chave)) { //verefica se já existe uma chave igual 
                 throw new Exception("Chave repetida! Não é possível adicionar um item com chave já existente.");
             }
         }
 
-        lista.guardeNoFinal(novoElemento);
+        lista.guardeNoFinal(novoElemento); //se não existir guarda no final da lista
         qtdElems++;
-        verificarTaxaEDimensionar();
+        verificarTaxaEDimensionar(); // após adicionar verifica a taxa para ver se falta ou soubrou espeça para ser redimencionada
     }
 
-    public V recupereUmItem(K chave) throws Exception {
+    public V recupereUmItem(K chave) throws Exception { //fala se existe algum valor a partir da chave.
         if (chave == null) {
-            throw new Exception("Chave não pode ser nula");
+            throw new Exception("Chave não pode ser nula"); // se a chave for nula, lança exceção
         }
 
-        int indice = calcularIndice(chave);
-        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice];
+        int indice = calcularIndice(chave); //qual indicie o bucket estará
+        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice]; //cria um bucket a partir da posição do indicie
 
-        if (lista != null) {
-            for (int i = 0; i < lista.getTamanho(); i++) {
-                Elemento atual = lista.get(i);
-                if (atual.getChave().equals(chave)) {
-                    return atual.getValor();
+        if (lista != null) { //percorre as listas q não são nulas
+                for (int i = 0; i < lista.getTamanho(); i++) { //verifica se os valores da lista
+                    Elemento atual = lista.get(i);
+                    if (atual.getChave().equals(chave)) { //são iguais ou não 
+                        return atual.getValor(); //se for igual printa o valor para o usuario
                 }
             }
         }
 
-        throw new Exception("Item não encontrado");
+        throw new Exception("Item não encontrado"); // se não, lança exceção
     }
 
-    public void removaUmItem(K chave) throws Exception {
-        int indice = calcularIndice(chave);
+    public void removaUmItem(K chave) throws Exception { //remova um valor a partir da chave
+        int indice = calcularIndice(chave); //calcula em qual bucket a chave está
         ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice];
 
-        if (lista != null) {
-            for (int i = 0; i < lista.getTamanho(); i++) {
-                Elemento atual = lista.get(i);
-                if (atual.getChave().equals(chave)) {
-                    lista.remova(i);
-                    qtdElems--;
+        if (lista != null) { //percorre as listas q não nullas
+            for (int i = 0; i < lista.getTamanho(); i++) { //percorre a lista 
+                Elemento atual = lista.get(i); //coloca o valor da lista em um ELemento atual
+                if (atual.getChave().equals(chave)) { //compara a chave com o elemente atual da lista
+                    lista.remova(i); //se for igual, remove a chave
+                    qtdElems--; //diminui o contade de elemento do hashMap
                     verificarTaxaEDimensionar(); // Verifica e redimensiona se necessário
                     return;
                 }
             }
         }
 
-        throw new Exception("Item não encontrado");
+        throw new Exception("Item não encontrado"); //se não encontrar lança exceção
     }
     
     
-    public void altereUmItem(K chave, V novoValor) throws Exception {
-        int indice = calcularIndice(chave);
-        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice];
+    public void altereUmItem(K chave, V novoValor) throws Exception { //método de pull em algum valor a partir da chave
+        int indice = calcularIndice(chave); //calcula em qual bucket a chave está
+        ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice]; //acessa a listaEncadeada a partir do indicie
 
-        if (lista != null) {
-            for (int i = 0; i < lista.getTamanho(); i++) {
+        if (lista != null) { //percorre a lista se não for nula
+            for (int i = 0; i < lista.getTamanho(); i++) { //percorre a lista
                 Elemento atual = lista.get(i);
-                if (atual.getChave().equals(chave)) {
-                    atual.setValor(novoValor);
+                if (atual.getChave().equals(chave)) { //compara os valores para ver se igual a chave
+                    atual.setValor(novoValor); //se for igual muda para o novoValor
                     return;
                 }
             }
         }
 
-        throw new Exception("Item não encontrado");
+        throw new Exception("Item não encontrado"); //se não encontrar lança exceção
     }
 
     public K recupereUmaChave(int index) throws Exception {
-        if (index < 0 || index >= qtdElems) {
-            throw new Exception("Índice fora dos limites");
+        if (index < 0 || index >= qtdElems) { //verifica se o existe, nos padrões
+            throw new Exception("Índice fora dos limites");//exceção
         }
 
-        int currentIndex = 0;
-        for (ListaEncadeadaSimplesDesordenada<Elemento> lista : vetor) {
-            if (lista != null) {
-                for (int i = 0; i < lista.getTamanho(); i++) {
-                    if (currentIndex == index) {
-                        return lista.get(i).getChave();
+        int currentIndex = 0; //seta indexAtual=0
+        for (ListaEncadeadaSimplesDesordenada<Elemento> lista : vetor) { //percorre os buckets no vetor
+            if (lista != null) {  //se lista não for nula
+                for (int i = 0; i < lista.getTamanho(); i++) { // percorre seus valores da lista
+                    if (currentIndex == index) { //se o IndexAtal for igual ao do user
+                        return lista.get(i).getChave(); //retorna a chave encontrada
                     }
-                    currentIndex++;
+                    currentIndex++; //aumenta o contador de index
                 }
             }
         }
 
-        throw new Exception("Item não encontrado");
+        throw new Exception("Item não encontrado"); // se n achar, int's over.
     }
 
-    public int getTamanho() {
-        return qtdElems;
+    public int getTamanho() { // retorna qtd de elemento no hash
+        return qtdElems; // só dar return no atributo qtdELementos.
     }
+
+
+//===============================Métodos Obrigatórios===============================
+
 
     @Override
     public boolean equals(Object obj) {
@@ -233,12 +241,12 @@ public class HashMap<K, V> {
 
         HashMap<K, V> other = (HashMap<K, V>) obj;
 
-        if (other.qtdElems != this.qtdElems || other.capacidadeInicial != this.capacidadeInicial
+        if (other.qtdElems != this.qtdElems || other.numBuckets != this.numBuckets
                 || other.txMinDesperdicio != this.txMinDesperdicio || other.txMaxDesperdicio != this.txMaxDesperdicio)
             return false;
 
             try{
-                for (int i = 0; i < capacidadeInicial; i++) {
+                for (int i = 0; i < numBuckets; i++) {
                     ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[i];
                     ListaEncadeadaSimplesDesordenada<Elemento> otherLista = other.vetor[i];
         
@@ -268,12 +276,12 @@ public class HashMap<K, V> {
         int ret = 777;
 
         ret += 13 * ret + qtdElems;
-        ret += 13 * ret + Integer.valueOf(capacidadeInicial).hashCode();
+        ret += 13 * ret + Integer.valueOf(numBuckets).hashCode();
         ret += 13 * ret + Float.valueOf(txMinDesperdicio).hashCode();
         ret += 13 * ret + Float.valueOf(txMaxDesperdicio).hashCode();
 
         try {
-            for (int i = 0; i < capacidadeInicial; i++) {
+            for (int i = 0; i < numBuckets; i++) {
                 ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[i];
                 if (lista != null) {
                     for (int j = 0; j < lista.getTamanho(); j++) {
@@ -309,6 +317,10 @@ public class HashMap<K, V> {
         sb.append("}");
         return sb.toString();
     }
+
+
+//==========================================Main===========================================
+
 
     public static void main(String[] args) {
         try {
