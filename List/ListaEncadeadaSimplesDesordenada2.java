@@ -194,21 +194,21 @@ public class ListaEncadeadaSimplesDesordenada2 <TpIdX extends Comparable<TpIdX>,
 	
 	private int getTamanho()
 	{
-			if(this.primeiro == null)
-			{
-				return 0;
-			}
-			
-			No atual = this.primeiro;
-			int elementos = 0;
-			
-			while(atual != null)
-			{
-					atual = atual.getProx();
-					elementos++;
-			}
-			
-			return elementos;
+		if(this.primeiro == null)
+		{
+			return 0;
+		}
+		
+		No atual = this.primeiro;
+		int elementos = 0;
+		
+		while(atual != null)
+		{
+				atual = atual.getProx();
+				elementos++;
+		}
+		
+		return elementos;
 	}
 	
 	// posicao poderá ser 0, 1, etc
@@ -270,24 +270,31 @@ public class ListaEncadeadaSimplesDesordenada2 <TpIdX extends Comparable<TpIdX>,
 	}
 	
 	// posições serão numeradas 0, 1, 2, etc
-	public void remova (int posicao) throws Exception
-	{
-		if(posicao < 0 || posicao >= this.getTamanho()){
-			throw new IndexOutOfBoundsException("Index out of bounds");
+	public void remova(TpIdX id) throws Exception {
+		if (this.getTamanho() == 0) {
+			throw new Exception("A lista está vazia.");
 		}
-			
-			
-		if(posicao == 0){
-			this.primeiro = this.primeiro.getProx();
-		} else{
-			No aux = this.primeiro;
-			for(int i = 0; i < posicao - 1; i++){
-			    aux = aux.getProx();
-			}
 		
-			aux.setProx(aux.getProx().getProx()); 
+		// Se o primeiro nó for o que queremos remover
+		if (this.primeiro.getInfo().getId().equals(id)) {
+			this.primeiro = this.primeiro.getProx();
+			return;
 		}
+		
+		// Caso contrário, percorre a lista para encontrar e remover o nó
+		No aux = this.primeiro;
+		while (aux.getProx() != null) {
+			if (aux.getProx().getInfo().getId().equals(id)) {
+				aux.setProx(aux.getProx().getProx());
+				return;
+			}
+			aux = aux.getProx();
+		}
+		
+		// Se o id não foi encontrado
+		throw new Exception("Elemento não encontrado");
 	}
+	
 	
     @Override
     public String toString ()

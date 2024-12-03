@@ -184,18 +184,31 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
 
     public void removaAresta (TpIdArt id) throws Exception
     {
+        if(!arestas.tem(id)) throw new Exception("o ID da aresta não existe.");
+
+        arestas.remova(id);
 
     } 
 
     public void removaVertice (TpIdVrt id ) throws Exception
-    {
+    {  /* 
+        if(!vertices.tem(id)) throw new Exception("o ID do verticie não exite");
+        
+        for(Aresta aresta : arestas){
+            if(aresta.getOrigem().equals(id) || aresta.getDestino().equals(id)){
+                arestas.remova(aresta.getId());
+            }
+        }
 
+        vertices.remova(id);
+ */
     }
+
+
 
     public boolean temVertice (TpIdVrt id) throws Exception
     {
-        if(vertices.tem(id)) throw new Exception("esse Vértice existe!");
-        else throw new Exception("esse Vértice não existe!");  
+         return true;
 
     }
 
@@ -213,6 +226,6 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
     
     public void numAresta() throws Exception
     {
-
+        System.out.println("Número de arestas: " + arestas.getTamanho();
     } 
 }
