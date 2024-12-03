@@ -187,6 +187,9 @@ public class HashMap<K, V> {
     }
     
     
+    //---------------------------------------------------------------------------------------------------------------------------------
+
+
     public void altereUmItem(K chave, V novoValor) throws Exception { //método de pull em algum valor a partir da chave
         int indice = calcularIndice(chave); //calcula em qual bucket a chave está
         ListaEncadeadaSimplesDesordenada<Elemento> lista = vetor[indice]; //acessa a listaEncadeada a partir do indicie

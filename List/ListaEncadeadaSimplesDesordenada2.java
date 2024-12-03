@@ -192,7 +192,7 @@ public class ListaEncadeadaSimplesDesordenada2 <TpIdX extends Comparable<TpIdX>,
 			
 	}
 	
-	private int getTamanho()
+	public int getTamanho()
 	{
 		if(this.primeiro == null)
 		{

@@ -6,17 +6,17 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
                     TpIdArt extends Comparable<TpIdArt>,
                     TpInfArt>
 {
-    private class Vertice implements Identificavel <TpIdVrt>, Cloneable
+    private class Vertice implements Identificavel <TpIdVrt>
     {
         private TpIdVrt  id;
         private TpInfVrt info;
         
-        public Vertice (TpIdVrt id, TpInfVrt inf) throws Exception
+        public Vertice (TpIdVrt id, TpInfVrt info) throws Exception
         {
             if (id==null) throw new Exception ("Vertice sem id");
             
-            this.id     =id;
-            this.info   =inf;
+            this.id = id;
+            this.info = info;
         }
 
         // getters, setters e overrides
@@ -34,7 +34,7 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         }
 
         public void setInfoVert(TpInfVrt inf){
-            this.info = inf;
+            this.info = info;
         }
 
         public void setIdVert(TpIdVrt id){
@@ -42,43 +42,34 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         }
 
         @Override
-        public String toString()
-        {
-            return this.info.toString();
+        public String toString() {
+            return "Vertice{" + "id=" + id + ", info=" + info + '}';
         }
 
         @Override
-        public boolean equals (Object obj)
-        {
-            if (obj == this) return true;
-            if (obj == null) return false;
-            if (obj.getClass()!=this.getClass()) return false;
-            
-            Vertice outro = (Vertice) obj;
-            return this.id.equals(outro.id);
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            Vertice vertice = (Vertice) obj;
+            return id.equals(vertice.id);
         }
 
         @Override
-		public int hashCode ()
-		{
-			int ret=1;
-			
-			ret=2*ret+this.info.hashCode();
-		
-		    if (ret<0) ret=-ret;
-			
-			return ret;
-		}
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
     
-    private class Aresta implements Identificavel <TpIdArt>, Cloneable
+    private class Aresta implements Identificavel <TpIdArt>
     {
         private TpIdArt    id;
         private TpInfArt   info;
         private TpIdVrt origem;
         private TpIdVrt destino;
         
-        public Aresta (TpIdArt id, TpInfArt inf, TpIdVrt org, TpIdVrt dst) throws Exception
+        public Aresta (TpIdArt id, TpInfArt info, TpIdVrt org, TpIdVrt dst) throws Exception
         {
             if (id==null) throw new Exception ("Aresta sem id");
             if (org==null) throw new Exception ("Aresta sem origem");
@@ -87,7 +78,7 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
             if (!vertices.tem(org)) throw new Exception ("Aresta com destino inexistente");
             
             this.id     =id;
-            this.info   =inf;
+            this.info   =info;
             this.origem =org;
             this.destino=dst;
         }
@@ -114,52 +105,25 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
             return this.destino;
         }
 
-        public void setIdArt(TpIdArt id){
-            this.id = id;
-        } 
-
-        public void setInfoArt(TpInfArt inf){
-            this.info = inf;
-        }
-
-        public void setOrigem(TpIdVrt org){
-            this.origem = org;
-        }
-
-        public void setDestino(TpIdVrt dst){
-            this.destino = dst;
-        } 
-
         @Override
-        public String toString()
-        {
-            return this.info.toString();
+        public String toString() {
+            return "Aresta{" + "id=" + id + ", info=" + info + ", origem=" + origem + ", destino=" + destino + '}';
         }
 
         @Override
-        public boolean equals (Object obj)
-        {
-            if (obj == this) return true;
-            if (obj == null) return false;
-            if (obj.getClass()!=this.getClass()) return false;
-            
-            Aresta outro = (Aresta) obj;
-            return this.id.equals(outro.id);
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            Aresta aresta = (Aresta) obj;
+            return id.equals(aresta.id);
         }
 
         @Override
-		public int hashCode ()
-		{
-			int ret=1;
-			
-			ret=2*ret+this.info.hashCode();
-		
-		    if (ret<0) ret=-ret;
-
-			return ret;
-		}
-
-        
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
 
     ListaEncadeadaSimplesDesordenada2<TpIdVrt, Vertice> vertices;
@@ -171,27 +135,31 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         this.arestas  = new ListaEncadeadaSimplesDesordenada2 <TpIdArt,Aresta> ();
     }
     
-    public void adicioneVertice (TpIdVrt id, TpInfVrt inf) throws Exception
+    public void adicioneVertice (TpIdVrt id, TpInfVrt info) throws Exception
     {
         if (vertices.tem(id)) throw new Exception ("esse Id de vértice já existe");
-        this.vertices.guardeNoInicio(new Vertice(id,inf));
+        this.vertices.guardeNoInicio(new Vertice(id,info));
     }
     
-    public void adicioneAresta (TpIdArt id, TpInfArt inf, TpIdVrt org, TpIdVrt dst) throws Exception
+    public void adicioneAresta (TpIdArt id, TpInfArt info, TpIdVrt org, TpIdVrt dst) throws Exception
     {
-        this.arestas.guardeNoInicio(new Aresta(id,inf,org,dst));
+        if(arestas.tem(id)) throw new Exception("Aresta já existe");
+        this.arestas.guardeNoInicio(new Aresta(id,info,org,dst));
     }
 
-    public void removaAresta (TpIdArt id) throws Exception
-    {
-        if(!arestas.tem(id)) throw new Exception("o ID da aresta não existe.");
-
-        arestas.remova(id);
-
+    public void removerAresta(TpInfVrt origem, TpInfVrt destino) throws Exception {
+        int getTamanho = this.arestas.getTamanho();
+        for (int i = 0; i < getTamanho; i++) {
+            Aresta aresta = this.arestas.getX(i);
+            if (aresta.getOrigem().equals(origem) && aresta.getDestino().equals(destino)) {
+                this.arestas.remova(aresta.getId());
+                return;
+            }
+        }
     } 
 
     public void removaVertice (TpIdVrt id ) throws Exception
-    {  /* 
+    {
         if(!vertices.tem(id)) throw new Exception("o ID do verticie não exite");
         
         for(Aresta aresta : arestas){
@@ -201,14 +169,15 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         }
 
         vertices.remova(id);
- */
+ 
     }
 
 
 
     public boolean temVertice (TpIdVrt id) throws Exception
     {
-         return true;
+        if(vertices.tem(id)) throw new Exception("esse Vertice existe");
+        else throw new Exception("esse Vertice não existe!");
 
     }
 
@@ -226,6 +195,6 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
     
     public void numAresta() throws Exception
     {
-        System.out.println("Número de arestas: " + arestas.getTamanho();
+        System.out.println("Número de arestas: " + arestas.getTamanho());
     } 
 }
