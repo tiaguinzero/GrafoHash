@@ -1,5 +1,5 @@
 package GrafoHash;
-import List.ListaEncadeadaSimplesDesordenada2;
+import Listas.*;
 
 public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
                     TpInfVrt,

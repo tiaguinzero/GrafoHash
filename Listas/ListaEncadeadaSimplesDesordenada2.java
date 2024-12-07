@@ -1,4 +1,4 @@
-package List;
+package Listas;
 import GrafoHash.Identificavel;
 
 public class ListaEncadeadaSimplesDesordenada2 <TpIdX extends Comparable<TpIdX>, X extends Identificavel<TpIdX>> implements Cloneable

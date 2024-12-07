@@ -1,5 +1,5 @@
 package GrafoHash;
-import List.ListaEncadeadaSimplesDesordenada;
+import Listas.*;
 
 public class HashMap<K, V> {
     private class Elemento {

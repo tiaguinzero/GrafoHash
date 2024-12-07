@@ -1,4 +1,4 @@
-package List;
+package Listas;
 
 public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 {
