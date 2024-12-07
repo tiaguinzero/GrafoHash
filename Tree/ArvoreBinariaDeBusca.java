@@ -17,17 +17,17 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
             this.dir =dir;
         }
 
-        public No (X info)
+        public No (X info) //construtor de folha, folha não tem filhos
         {
             this(null,info,null);
         }
 
-        public No (No esq, X info)
+        public No (No esq, X info)  //No com filho à esquerda
         {
             this(esq,info,null);
         }
 
-        public No (X info, No dir)
+        public No (X info, No dir) //No com filho à direita
         {
             this(null,info,dir);
         }
@@ -63,6 +63,47 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         }
         
         // métodos obrigatórios
+        @Override
+        public String toString ()
+        {
+            return this.info.toString();
+        }
+
+        @Override
+        public boolean equals (Object obj)
+        {
+            if (obj==this) return true;
+            if (obj==null) return false;
+            if (obj.getClass()!=this.getClass()) return false;
+            
+            if (!((No)obj).info.equals(this.info)) return false;
+            
+            return true;
+        }
+
+        @Override
+        public int hashCode ()
+        {
+            int ret=1;
+            
+            ret=2*ret+this.info.hashCode();
+            
+            return ret;
+        }
+
+        @Override
+        public No clone ()
+        {
+            No ret=null;
+
+            if (this.esq!=null)
+                ret=this.esq.clone();
+            ret=new No (ret,this.info);
+            if (this.dir!=null)
+                ret=this.dir.clone();
+
+            return ret;
+        }
     }
 
     private No raiz;

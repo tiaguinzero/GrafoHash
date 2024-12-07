@@ -112,10 +112,8 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null || getClass() != obj.getClass())
-                return false;
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Aresta aresta = (Aresta) obj;
             return id.equals(aresta.id);
         }
