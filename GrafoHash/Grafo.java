@@ -147,32 +147,44 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
         this.arestas.guardeNoInicio(new Aresta(id,info,org,dst));
     }
 
-    public void removerAresta(TpInfVrt origem, TpInfVrt destino) throws Exception {
+    public void removerAresta(TpIdVrt origem, TpIdVrt destino) throws Exception {
         int getTamanho = this.arestas.getTamanho();
         for (int i = 0; i < getTamanho; i++) {
-            Aresta aresta = this.arestas.getX(i);
+            Aresta aresta = this.arestas.get(i);
             if (aresta.getOrigem().equals(origem) && aresta.getDestino().equals(destino)) {
                 this.arestas.remova(aresta.getId());
                 return;
             }
         }
+        throw new Exception("Aresta não encontrada");
     } 
 
-    public void removaVertice (TpIdVrt id ) throws Exception
-    {
-        if(!vertices.tem(id)) throw new Exception("o ID do verticie não exite");
-        
-        for(Aresta aresta : arestas){
-            if(aresta.getOrigem().equals(id) || aresta.getDestino().equals(id)){
-                arestas.remova(aresta.getId());
+    public void removaVertice(TpIdVrt id) throws Exception {
+        if (!vertices.tem(id)) throw new Exception("O ID do vértice não existe");
+
+        int getTamanho = this.arestas.getTamanho();
+        for (int i = 0; i < getTamanho; i++) {
+            Aresta aresta = this.arestas.get(i);
+            if (aresta.getOrigem().equals(id) || aresta.getDestino().equals(id)) {
+                this.arestas.remova(aresta.getId());
+                i--; // Ajustar o índice após a remoção
+                getTamanho--; // Ajustar o tamanho após a remoção
             }
         }
 
         vertices.remova(id);
- 
     }
 
-
+    public void obterVizinhos(TpIdVrt id) throws Exception {
+        int getTamanho = this.arestas.getTamanho();
+        for (int i = 0; i < getTamanho; i++) {
+            Aresta aresta = this.arestas.get(i);
+            if (aresta.getOrigem().equals(id)) {
+                Vertice verticeDestino = this.vertices.getX(aresta.getDestino());
+                System.out.println(verticeDestino.getInfoVert());
+            }
+        }
+    }
 
     public boolean temVertice (TpIdVrt id) throws Exception
     {
@@ -190,7 +202,7 @@ public class Grafo <TpIdVrt extends Comparable<TpIdVrt>,
 
     public void numVertices() throws Exception
     {
-
+        System.out.println("Número de vértices: " + vertices.getTamanho());
     }
     
     public void numAresta() throws Exception

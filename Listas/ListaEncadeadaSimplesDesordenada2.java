@@ -243,6 +243,28 @@ public class ListaEncadeadaSimplesDesordenada2 <TpIdX extends Comparable<TpIdX>,
 		X cont = new Clonador<X>().clone(atual.getInfo());
 		return cont;
 	}
+
+	public X getX(TpIdX id) throws Exception
+	{
+		if(this.primeiro == null)
+		{
+			throw new Exception("Nó invalido");
+		}
+		
+		No atual = this.primeiro;
+		
+		while(atual != null)
+		{
+			if(atual.getInfo().getId().equals(id))
+			{
+				X cont = new Clonador<X>().clone(atual.getInfo());
+				return cont;
+			}
+			atual = atual.getProx();
+		}
+		
+		throw new Exception("Elemento não encontrado");
+	}
 	
 	public void removaPrimeiro () throws Exception
 	{
