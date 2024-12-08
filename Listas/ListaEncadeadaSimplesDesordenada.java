@@ -260,6 +260,22 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 		throw new Exception("Posição não existente na Lista.");
 	}
 
+	public void inverta() throws Exception
+	{
+		if(this.primeiro == null) throw new Exception("Lista Vazia");
+
+		No Atual = this.primeiro;
+		No Proximo = Atual.getProx();
+
+		while(Atual != null)
+		{
+			No Temp = Proximo.getProx();
+			Proximo.setProx(Atual);
+			Atual = Proximo;
+			Proximo = Temp;
+		}
+	}
+
 	public int getTamanho(){
 		int count = 0;
 		No currentNo = this.primeiro;
@@ -271,7 +287,6 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 
 		return count;
 	}
-
 
 
     @Override
