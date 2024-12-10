@@ -460,6 +460,43 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         }
     }
 
+    //1) Escreva uma função que verifica se duas árvores são uma o espelho da outra, retornando True ou False.
+    public boolean isEspelho(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b) {
+        return isEspelho(a.raiz, b.raiz);
+    }
 
+    private boolean isEspelho(No a, No b)
+    {
+        if(a == null && b == null) return true;
+        if(a == null || b == null) return false;
+
+        if(!a.getInfo().equals(b.getInfo())) return false;
+        if(!isEspelho(a.getEsq(), b.getDir())) return false;
+        if(!isEspelho(a.getDir(), b.getEsq())) return false;
+        return true;
+
+    }
+
+    //2) Escreva uma função que compare duas árvores binárias e determine se
+    //elas são estruturalmente iguais (mesma forma, não necessariamente os 
+    //mesmos valores), returnando True ou False.
+    public boolean isIgual(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b)
+    {
+        return isIgual(a.raiz, b.raiz);
+    }
+    
+    private boolean isIgual(No a, No b)
+    {
+        if(a == null && b == null) return false;
+        if(a == null || b == null) return true;
+
+        if(!isEspelho(a.getEsq(), b.getEsq())) return false;
+        if(!isEspelho(a.getDir(), b.getDir())) return false;
+        return true;
+    }
+
+    //3) Escreva uma função que compare duas árvores binárias e determine
+    //se elas são iguais (mesma forma e mesmos valores nos nodos), returnando
+    //True ou False.
 }
 

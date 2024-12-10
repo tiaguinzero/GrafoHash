@@ -2,22 +2,24 @@ package Listas;
 
 public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 {
-	private class No implements Cloneable
+	private class No implements Cloneable //classe interna da Lista
 	{
-	    private X  info;
-	    private No prox;
+	    private X  info; //informação do Tipo X(genérico; recebe qualquer tipo de parametro)
+	    private No prox; //ponteiro o Proximo Nó(um nó com informação e ponteiro)
 	    
-	    public No (X i, No p)
+	    public No (X i, No p) //poder criar um nó que pode ter uma informção e um ponteiro
 	    {
 	        this.info=i;
 	        this.prox=p;
 	    }
 	    
-	    public No (X i)
+	    public No (X i) //Um nó com informação mas sem o ponteiro(null), sendo o último nó da lista
 	    {
 	        this.info=i;
 	        this.prox=null;
 	    }
+		//gettes e setters dos nós
+
 	    public X getInfo ()
 	    {
 	        return this.info;
@@ -95,84 +97,81 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 	
 	private No primeiro=null;
 	
-	public void guardeNoInicio (X i) throws Exception
+	public void guardeNoInicio (X i) throws Exception //recebe um parametro i do tipo X
 	{
-		if (i==null) throw new Exception ("Informação ausente");
-		
-		this.primeiro = new No (i,this.primeiro);
+		if(i == null) throw new Exception("informação ausente");
+
+		this.primeiro = new No(i, this.primeiro);
 	}
 	
 	public void guardeNoFinal (X i) throws Exception
 	{
-		if (i==null) throw new Exception ("Informação ausente");
+		if(i == null) throw new Exception("inforamação ausente");
 
-        if (this.primeiro==null) this.primeiro = new No (i);
-        
-        No currentNo=this.primeiro;
-        
-        while (currentNo.getProx()!=null)
-            currentNo=currentNo.getProx();
-        
-        currentNo.setProx(new No (i));
+		if(this.primeiro == null) this.primeiro = new No (i); //se o primeiro No não existe(null), cria um novo Nó, pois o primeiro será o ultimo Nó também.
+
+		No atual = this.primeiro;
+		while(atual.getProx() != null)
+			atual = atual.getProx();
+
+		atual.setProx(new No(i));
 	}
 	
-	public boolean tem (X i)
+	public boolean tem (X i ) throws Exception
 	{
-		No currentNo=this.primeiro;
-		
-		while (currentNo!=null)
+		if(i == null) throw new Exception("informação ausente");
+
+		No atual = this.primeiro;
+
+		while(atual != null) //percorre a lista até o ultimo elemento
 		{
-			if (currentNo.getInfo().equals(i)) return true;
-			
-			currentNo=currentNo.getProx();
+			if(atual.getInfo().equals(i))
+			return true; //se achar retonar true
+
+			atual = atual.getProx();
 		}
-		
-		return false;
+		return false; //se não retorna false
 	}
 	
-	public X getPrimeiro () throws Exception
+	public X getPrimeiro() throws Exception //recebe i do tipo X e retorna o a informação do primeiro do tipo X
 	{
 		if(this.primeiro == null) throw new Exception("Lista Vazia");
 
 		return this.primeiro.getInfo();
 	}
 	
-	public X getUltimo () throws Exception
+	public X getUltimo() throws Exception
 	{
-		if(this.primeiro == null) throw new Exception("Lista Vazia");
+		if(this.primeiro == null) throw new Exception("Lista vazia");
+		
+		if(this.primeiro.getProx() == null) return this.primeiro.getInfo();
 
-		if(this.primeiro.getProx() == null) return this.primeiro.info;
-
-		No currentNo = this.primeiro;
-		while (currentNo.getProx()!=null) {
-			currentNo = currentNo.getProx();
+		No atual = this.primeiro;
+		while(atual.getProx() != null){
+			atual = atual.getProx();
 		}
-		return currentNo.getInfo();
+		return atual.getInfo();
 	}
 	
 	// posicao poderá ser 0, 1, etc
-	public X get (int posicao) throws Exception
+	public X get(int posicao) throws Exception
 	{
-
-
-		if(posicao<0) throw new Exception("Posição Inválida.");
+		if(posicao < 0) throw new Exception("Posição invalida");
 
 		if(posicao == 0) return this.primeiro.getInfo();
 
 		int count = 1;
-		No currentNo = this.primeiro;
+		No atual = this.primeiro;
 
-		while (currentNo.getProx() != null) {
+		while(atual.getProx() != null)
+		{
+			if(posicao == count) return atual.getInfo();
 
-			if(count == posicao) return currentNo.getInfo();
-
-			currentNo = currentNo.getProx();
-
-			count++;
+			atual = atual.getProx();
+			count ++;
 		}
 
-		throw new Exception("Posição Inválida "+ posicao);
-
+		throw new Exception("Essa posição é invalida" + posicao);
 	}
 
 	public void guardeEm (int posicao, X i) throws Exception
@@ -191,7 +190,7 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 		No  atual   =this.primeiro;
 		int posAtual=0;
 		
-		while (atual.getProx()!=null && posAtual<posicao-1)
+		while (atual.getProx()!=null && posAtual < posicao-1)
 		{
 			atual=atual.getProx();
 			posAtual++;
@@ -224,12 +223,12 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 			return;
 		}
 
-		No currentNo = this.primeiro;
+		No atual = this.primeiro;
 		No predecessor = null;
 
-		while (currentNo.getProx() != null) {
-			predecessor = currentNo;
-			currentNo = currentNo.getProx();
+		while (atual.getProx() != null) {
+			predecessor = atual;
+			atual = atual.getProx();
 		}
 		predecessor.setProx(null);
 	}	
@@ -242,18 +241,18 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 			return;
 		}
 
-		No currentNo = this.primeiro;
+		No atual = this.primeiro;
 		int contador = 1;
 		No predecessor = null;
 
-		while (currentNo != null) {
+		while (atual != null) {
 			if (contador == posicao) {
-				predecessor.setProx(currentNo.getProx());
+				predecessor.setProx(atual.getProx());
 				return;
 			}
 
-			predecessor = currentNo;
-			currentNo = currentNo.getProx();
+			predecessor = atual;
+			atual = atual.getProx();
 			contador++;
 		}
 
@@ -278,11 +277,11 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 
 	public int getTamanho(){
 		int count = 0;
-		No currentNo = this.primeiro;
+		No atual = this.primeiro;
 
-		while (currentNo != null) {
+		while (atual != null) {
 			count++;
-			currentNo = currentNo.getProx();
+			atual = atual.getProx();
 		}
 
 		return count;
@@ -298,12 +297,12 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 		
 		ret+=this.primeiro.getInfo();
 		
-		No currentNo = this.primeiro.getProx();
+		No atual = this.primeiro.getProx();
 		
-		while (currentNo!=null)
+		while (atual!=null)
 		{
-			ret+=", "+currentNo.getInfo();
-			currentNo=currentNo.getProx();
+			ret+=", "+atual.getInfo();
+			atual=atual.getProx();
 		}
 		
 		return ret+"]";
@@ -336,12 +335,12 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 	{
 		int ret=1;
 		
-		No currentNo=this.primeiro;
+		No atual=this.primeiro;
 		
-		while (currentNo!=null)
+		while (atual!=null)
 		{
-			ret = ret*2 + currentNo.getInfo().hashCode();
-			currentNo=currentNo.getProx();
+			ret = ret*2 + atual.getInfo().hashCode();
+			atual=atual.getProx();
 		}		
 		
 		if (ret<0) ret=-ret;
