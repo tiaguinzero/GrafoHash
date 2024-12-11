@@ -32,6 +32,7 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
             this(null,info,dir);
         }
 
+        //getters e setters
         public No getEsq ()
         {
             return this.esq;
@@ -130,7 +131,7 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         return ret;
     }
     
-    public void inclua (X inf) throws Exception
+    public void inclua (X inf) throws Exception //método para incluir um nó na árvore
     {
         if (inf==null) throw new Exception ("informacao ausente");
 
@@ -172,24 +173,26 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         }
     }
 
-	public boolean tem (X info) throws Exception
-	{
-		if (info==null) throw new Exception ("informacao ausente");
+    public boolean tem(X info) throws Exception
+    {
+        if(info == null) throw new Exception("informção vazia");
 
-        No atual=this.raiz;
-        for(;;) // forever
+        No atual = this.raiz;
+        for(;;) //forever
         {
-			if (atual==null) return false;
-			
+            if(atual == null) return false; //se não existe raiz, n tem arvore e nem nós para ver
+
             int comparacao = info.compareTo(atual.getInfo());
-            if (comparacao==0) return true;
-            
-            if (comparacao<0)
-                atual=atual.getEsq();
-            else // comparacao>0
-                atual=atual.getDir();
+
+            if(comparacao == 0) 
+                return true;
+            if(comparacao > 0)
+                atual = atual.getDir();
+            else //comparacao < 0
+                atual = atual.getEsq();
+
         }
-	}
+    }
 
     public X getMenor () throws Exception
     {
@@ -215,16 +218,18 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
 		return ret;
     }
 
-    public int getQtdDeNodos ()
+    public int getQtdDeNodos()
     {
-		return getQtdDeNodos (this.raiz);
-	}
+        return getQtdDeNodos(this.raiz); //passo a raiz da arvore para cmc a contar
+    }
 
-    private int getQtdDeNodos (No r)
+    private int getQtdDeNodos(No r)
     {
-		if (r==null) return 0;
-		return 1+getQtdDeNodos(r.getEsq())+getQtdDeNodos(r.getDir());
-	}
+        if(r == null) return 0; //se n tem raiz, tem 0 nós
+
+        return 1 + getQtdDeNodos(r.getEsq()) + getQtdDeNodos(r.getDir());
+                    //percorre os nós da esquerda e direita
+    }
 
     public void balanceieSe () throws Exception
     {
@@ -460,7 +465,8 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         }
     }
 
-    //1) Escreva uma função que verifica se duas árvores são uma o espelho da outra, retornando True ou False.
+    //1) Escreva uma função que verifica se duas árvores são uma o espelho da 
+    //outra, retornando True ou False.
     public boolean isEspelho(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b) {
         return isEspelho(a.raiz, b.raiz);
     }
@@ -480,12 +486,12 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
     //2) Escreva uma função que compare duas árvores binárias e determine se
     //elas são estruturalmente iguais (mesma forma, não necessariamente os 
     //mesmos valores), returnando True ou False.
-    public boolean isIgual(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b)
+    public boolean isForma(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b)
     {
-        return isIgual(a.raiz, b.raiz);
+        return isForma(a.raiz, b.raiz);
     }
     
-    private boolean isIgual(No a, No b)
+    private boolean isForma(No a, No b)
     {
         if(a == null && b == null) return false;
         if(a == null || b == null) return true;
@@ -498,5 +504,103 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
     //3) Escreva uma função que compare duas árvores binárias e determine
     //se elas são iguais (mesma forma e mesmos valores nos nodos), returnando
     //True ou False.
+
+    public boolean isIdentica(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b)
+    {
+        return isIdentica(a.raiz, b.raiz);
+    }
+
+    private boolean isIdentica(No a, No b)
+    {
+        if(a == null && b == null) return true;
+        if(a == null || b == null) return false;
+
+        if(!a.getInfo().equals(b.getInfo())) return false;
+        if(!isIdentica(a.getDir(), b.getDir())) return false;
+        if(!isIdentica(a.getEsq(), b.getEsq())) return false;
+        return true;
+    }
+
+    // 4) Escreva uma função para printar uma árvore em notação pré-ordem, ou
+    // seja, primeiro printa a raiz, depois printa a subárvore esquerda e,
+    // finalmente, printa a subárvore direita.
+
+    public void preOrdem(ArvoreBinariaDeBusca <X> atual)
+    {
+        preOrdem(atual.raiz);
+    }
+
+    private void preOrdem(No atual) 
+    {
+        if(atual == null) return;
+
+        System.out.println(atual.getInfo());
+        preOrdem(atual.getEsq());
+        preOrdem(atual.getDir());
+    }
+
+    // 5) Escreva uma função para printar uma árvore em notação in-ordem, ou
+    // seja, primeiro printa a subárvore esquerda, depois printa a raiz, e,
+    // finalmente, printa a subárvore direita.
+
+    public void inOrdem(ArvoreBinariaDeBusca <X> atual)
+    {
+        inOrdem(atual.raiz);
+    }
+    private void inOrdem(No atual)
+    {
+        if(atual == null) return;
+        
+        inOrdem(atual.getEsq());
+        System.out.println(atual.getInfo());
+        inOrdem(atual.getDir());
+    }
+
+    // 6) Escreva uma função para printar uma árvore em notação pós-ordem, ou
+    // seja, primeiro printa a subárvore esquerda, depois printa a subárvore
+    // direita e, finalmente, printa a raiz.
+
+    public void posOrdem(ArvoreBinariaDeBusca<X> atual)
+    {
+        posOrdem(atual.raiz);
+    }
+
+    private void posOrdem(No atual)
+    {
+        if(atual == null) return;
+
+        posOrdem(atual.getEsq());
+        posOrdem(atual.getDir());
+        System.out.println(atual.getInfo());
+    }
+
+    // 7) Escreva uma função para printar uma árvore em notação de "cebola", ou
+    // seja, o encaixamento das informações da árvore seria dado pela
+    // parentetização dos elementos, por exemplo: (((10)25(40))50((60)75(95))),
+    // onde 50 seria raiz, 25 seria a raiz da subárvore esquerda de 50, 75 seria
+    // a raiz da subárvore direita de 50, 10 seria a raiz da subárvore esquerda
+    // de 25, 40 seria a raiz da subárvore direita de 25, 60 seria a raiz da
+    // subárvore esquerda de 75, 95 seria a raiz da subárvore direita de 75.
+    // Ainda, 10, 40, 60 e 95 não teriam subárvores nem esquerda e nem direita,
+    // já que estão sozinhos dentro de um par de parênteses. 
+
+    public void emCebola(ArvoreBinariaDeBusca<X> atual)
+    {
+        emCebola(atual.raiz);
+    }
+
+    private void emCebola(No atual)
+    {
+        if (atual == null){ 
+            System.out.println("()");
+            return;
+        }
+
+        System.out.println("(");
+        emCebola(atual.getEsq());
+        System.out.println(atual.getInfo());
+        emCebola(atual.getDir());
+        System.out.println(")");
+    }
 }
 
