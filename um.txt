@@ -1,0 +1,32 @@
+    1) Escreva uma função que verifica se duas árvores são uma o espelho da 
+    outra, retornando True ou False.
+
+    2) Escreva uma função que compare duas árvores binárias e determine se
+    elas são estruturalmente iguais (mesma forma, não necessariamente os 
+    mesmos valores), returnando True ou False.
+
+    3) Escreva uma função que compare duas árvores binárias e determine
+    se elas são iguais (mesma forma e mesmos valores nos nodos), returnando
+    True ou False.
+
+    4) Escreva uma função para printar uma árvore em notação pré-ordem, ou
+    seja, primeiro printa a raiz, depois printa a subárvore esquerda e,
+    finalmente, printa a subárvore direita.
+
+    5) Escreva uma função para printar uma árvore em notação in-ordem, ou
+    seja, primeiro printa a subárvore esquerda, depois printa a raiz, e,
+    finalmente, printa a subárvore direita.
+
+    6) Escreva uma função para printar uma árvore em notação pós-ordem, ou
+    seja, primeiro printa a subárvore esquerda, depois printa a subárvore
+    direita e, finalmente, printa a raiz.
+
+    7) Escreva uma função para printar uma árvore em notação de "cebola", ou
+    seja, o encaixamento das informações da árvore seria dado pela
+    parentetização dos elementos, por exemplo: (((10)25(40))50((60)75(95))),
+    onde 50 seria raiz, 25 seria a raiz da subárvore esquerda de 50, 75 seria
+    a raiz da subárvore direita de 50, 10 seria a raiz da subárvore esquerda
+    de 25, 40 seria a raiz da subárvore direita de 25, 60 seria a raiz da
+    subárvore esquerda de 75, 95 seria a raiz da subárvore direita de 75.
+    Ainda, 10, 40, 60 e 95 não teriam subárvores nem esquerda e nem direita,
+    já que estão sozinhos dentro de um par de parênteses. 

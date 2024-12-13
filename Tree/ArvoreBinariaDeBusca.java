@@ -218,6 +218,20 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
 		return ret;
     }
 
+    public X menorValor() throws Exception
+    {
+        if(this.raiz == null) throw new Exception("arvore vazia");
+
+        No atual = this.raiz;
+
+        while(atual.getEsq() != null)
+        {
+            atual = atual.getEsq();
+        }
+
+        return atual.getInfo();
+    }
+
     public int getQtdDeNodos()
     {
         return getQtdDeNodos(this.raiz); //passo a raiz da arvore para cmc a contar
@@ -328,6 +342,18 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
 		}
 		
 		return ret;
+    }
+
+    public X maiorValor() throws Exception
+    {
+        if(this.raiz == null) throw new Exception("arvore vazia");
+
+        No atual = this.raiz;
+        while(atual.getDir() != null)
+        {
+            atual = atual.getDir();
+        }
+        return atual.getInfo();
     }
     
     public void remova (X info) throws Exception
@@ -463,6 +489,84 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
 
             atual.setInfo(sucessor.getInfo());
         }
+    }
+
+    //imprime as folhas de uma arvore
+
+    public void getFolhas(ArvoreBinariaDeBusca<X> a)
+    {
+        getFolhas(a.raiz);
+    }
+
+    private void getFolhas(No a)
+    {
+        if(a == null) return;
+        if(a.getEsq() == null && a.getDir() == null){
+            System.out.print(a.getInfo() + "");
+            return;
+        }
+        getFolhas(a.getDir());
+        getFolhas(a.getEsq());
+    }
+
+    //mostra a qntd de folhas de uma arvore
+
+    public int qtdDeFolhas(ArvoreBinariaDeBusca<X> a)
+    {
+        return qtdDeFolhas(a.raiz);
+    }
+
+    private int qtdDeFolhas(No a)
+    {
+        if(a == null) return 0;
+        if(a.getDir() == null && a.getEsq() == null){
+            return 1;
+        }
+        return qtdDeFolhas(a.getEsq())+qtdDeFolhas(a.getDir());
+    }
+
+    //espelha os nós dada um arvore
+
+    public void espelhar(ArvoreBinariaDeBusca <X> a)
+    {
+        espelhar(a.raiz);
+    }
+
+    private void espelhar(No a)
+    {
+        if(a == null) return;
+
+        No temp = a.getEsq();
+
+        a.setEsq(a.getDir());
+        a.setDir(temp);
+
+        espelhar(a.getEsq());
+        espelhar(a.getDir());
+    }
+
+    //verifica se a Arvore A é subArvore da Arvore B
+
+    public boolean isSubArvore(ArvoreBinariaDeBusca <X> a, ArvoreBinariaDeBusca <X> b){
+        return isSubArvore(a.raiz, b.raiz);
+    }
+
+    private boolean isSubArvore(No a, No b)
+    {
+        isIdentica(a,b);
+
+        return isSubArvore(a.getEsq(), b) || isSubArvore(a.getDir(), b);
+    }
+
+    public void imprimirNivel(No a, int nivel)
+    {
+        if(nivel == 0){
+            System.out.println(a.getInfo());
+        }
+
+        imprimirNivel(a.getEsq(), nivel - 1);
+        imprimirNivel(a.getDir(), nivel - 1);
+
     }
 
     //1) Escreva uma função que verifica se duas árvores são uma o espelho da 

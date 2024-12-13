@@ -198,9 +198,6 @@ public class ListaEncadeadaSimplesDesordenada <X> implements Cloneable
 		
 		atual.setProx (new No (inf,atual.getProx()));
 	}
-	
-
-	
 	public void removaPrimeiro () throws Exception
 	{
 		if(this.primeiro == null) throw new Exception("Lista Vazia");
