@@ -558,6 +558,8 @@ public class ArvoreBinariaDeBusca <X extends Comparable<X>> implements Cloneable
         return isSubArvore(a.getEsq(), b) || isSubArvore(a.getDir(), b);
     }
 
+    //printa um nivel de uma arvore
+
     public void imprimirNivel(No a, int nivel)
     {
         if(nivel == 0){
